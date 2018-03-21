@@ -1,0 +1,8 @@
+{"name":"BlueLed","type":"led","file":"/blueled.json"}
+
+{"gpio":16,"mode":"wifi"}
+
+
+{"name":"RedLed","type":"led","file":"/redled.json"}
+
+{"gpio":15,"mode":"mqttOutputMode"}

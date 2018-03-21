@@ -1,0 +1,11 @@
+{"name":"KuecheLichtVorne","type":"digitaloutput","file":"/kuechelichtvorne.json"}
+
+{"outputNumber":3,"statusTopic":"Kueche/LichtVorne","getTopic":"Kueche/LichtVorne/get","setTopic":"Kueche/LichtVorne/set"}
+
+{"name":"KuecheLichtHinten","type":"digitaloutput","file":"/kuechelichthinten.json"}
+
+{"outputNumber":5,"statusTopic":"Kueche/LichtHinten","getTopic":"Kueche/LichtHinten/get","setTopic":"Kueche/LichtHinten/set"}
+
+{"name":"SchlafzimmerLicht","type":"digitaloutput","file":"/schlafzimmerlicht.json"}
+
+{"outputNumber":5,"statusTopic":"Schlafzimmer/Licht","getTopic":"Schlafzimmer/Licht/get","setTopic":"Schlafzimmer/Licht/set"}

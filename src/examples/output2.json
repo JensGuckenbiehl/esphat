@@ -1,0 +1,7 @@
+{"name":"BadLicht","type":"digitaloutput","file":"/badlicht.json"}
+
+{"outputNumber":3,"statusTopic":"Bad/Licht","getTopic":"Bad/Licht/get","setTopic":"Bad/Licht/set"}
+
+{"name":"AussenLicht","type":"digitaloutput","file":"/aussenlicht.json"}
+
+{"outputNumber":3,"statusTopic":"Aussen/Licht","getTopic":"Aussen/Licht/get","setTopic":"Aussen/Licht/set"}

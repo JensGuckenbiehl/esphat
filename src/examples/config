@@ -1,0 +1,9 @@
+[039096] > boardName => LOOKSOFT_HAOM8
+[039096] > hostname => TestOut
+[039096] > loopDelay => 1
+[039096] > mqttEnabled => 1
+[039097] > mqttServer => 192.168.2.1
+[039101] > pass0 => esp4iot!
+[039103] > ssid0 => IoT
+
+mqttClientID

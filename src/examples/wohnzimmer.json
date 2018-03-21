@@ -1,0 +1,23 @@
+{"name":"schalterObenLinks","type":"button","file":"/schalterobenlinks.json"}
+
+{"gpio":26,"clickCommand":"MQTT.PUBLISH Wohnzimmer/LichtVorne/set toggle 0","doubleClickCommand":"","longClickCommand":""}
+
+
+{"name":"schalterObenRechts","type":"button","file":"/schalterobenrechts.json"}
+
+{"gpio":33,"clickCommand":"MQTT.PUBLISH Kueche/LichtVorne/set toggle 0","doubleClickCommand":"","longClickCommand":""}
+
+
+{"name":"schalterUntenLinks","type":"button","file":"/schalteruntenlinks.json"}
+
+{"gpio":25,"clickCommand":"MQTT.PUBLISH Wohnzimmer/LichtHinten/set toggle 0","doubleClickCommand":"","longClickCommand":""}
+
+
+{"name":"schalterUntenRechts","type":"button","file":"/schalteruntenrechts.json"}
+
+{"gpio":32,"clickCommand":"MQTT.PUBLISH Kueche/LichtHinten/set toggle 0","doubleClickCommand":"","longClickCommand":""}
+
+
+{"name":"schalterHinten","type":"button","file":"/schalterhinten.json"}
+
+{"gpio":35,"clickCommand":"MQTT.PUBLISH Flur/Licht/set toggle 0","doubleClickCommand":"","longClickCommand":""}
