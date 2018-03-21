@@ -8,4 +8,4 @@
 
 {"name":"SchlafzimmerLicht","type":"digitaloutput","file":"/schlafzimmerlicht.json"}
 
-{"outputNumber":5,"statusTopic":"Schlafzimmer/Licht","getTopic":"Schlafzimmer/Licht/get","setTopic":"Schlafzimmer/Licht/set"}
+{"outputNumber":0,"statusTopic":"Schlafzimmer/Licht","getTopic":"Schlafzimmer/Licht/get","setTopic":"Schlafzimmer/Licht/set"}
