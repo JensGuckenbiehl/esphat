@@ -1,0 +1,5 @@
+{
+    "gpio": 1,
+    "mode": "wifiState",
+    "inverted": true
+}

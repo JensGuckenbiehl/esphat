@@ -1,0 +1,12 @@
+[
+    {
+        "name": "RedLed",
+        "type": "led",
+        "file": "/redled.json"
+    },
+    {
+        "name": "GreenLed",
+        "type": "led",
+        "file": "/greenled.json"
+    }
+]

@@ -1,94 +1,118 @@
-#include "ledmodule.h" 
+#include "ledmodule.h"
 
 #include "modulefactory.h"
 REGISTER_MODULE("led", LedModule)
 
-#include "config/all.h"
-
-LedModule::LedModule() : _gpio(-1), _mode(""), _led(NULL) {
-    //registerLoop(std::bind(&LedModule::loop, this));
+LedModule::LedModule() : _gpio(-1), _mode(""), _inverted(false), _led(NULL) {
+  getVariables()->regsiterNotifier(this);
 }
 
 LedModule::~LedModule() {
-    if(_led != NULL) {
-        delete _led;
-    } 
+  getVariables()->unregsiterNotifier(this);
+  if (_led != NULL) {
+    delete _led;
+  }
 }
 
 void LedModule::start() {
-    if(_gpio != -1) {
-        _led = new TTLED(_gpio, true);
-    }
+  if (_gpio != -1) {
+    _led = new OutputPin(_gpio, false, _inverted);
+    update();
+  }
 }
 
 void LedModule::stop() {
-    _gpio = -1;
-    if(_led != NULL) {
-        delete _led;
-    } 
+  _gpio = -1;
+  if (_led != NULL) {
+    delete _led;
+  }
 }
 
 String LedModule::serialize() {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& configJson = jsonBuffer.createObject();
-    configJson["gpio"] = _gpio;
-    configJson["mode"] = _mode;
-    String output;
-    configJson.printTo(output);
-    return output;
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& configJson = jsonBuffer.createObject();
+  configJson["gpio"] = _gpio;
+  configJson["mode"] = _mode;
+  if (_inverted) {
+    configJson["inverted"] = _inverted;
+  }
+  String output;
+  configJson.printTo(output);
+  return output;
 }
 
-void LedModule::deserialize(const String& json) {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& configJson = jsonBuffer.parseObject(json);
-    if(configJson.containsKey("gpio")) {
-        _gpio = configJson["gpio"];
+void LedModule::deserialize(const JsonObject& configJson) {
+  if (configJson.containsKey("gpio")) {
+    _gpio = configJson["gpio"];
+  }
+  if (configJson.containsKey("mode")) {
+    _mode = configJson["mode"].as<String>();
+  }
+  if (configJson.containsKey("inverted")) {
+    _inverted = configJson["inverted"];
+  } else {
+    _inverted = false;
+  }
+}
+
+void LedModule::handleKeyValueStoreChange(const String& key,
+                                          const String& value,
+                                          KeyValueStore* sender) {
+  if (_led == NULL) {
+    return;
+  }
+  if (_mode.equals("wifiState") && key.equals("wifiState")) {
+    update();
+  }
+  if (_mode.equals("mqttState") && key.equals("mqttState")) {
+    update();
+  }
+  if (_mode.equals("outputState") && key.equals("outputState")) {
+    update();
+  }
+  if (_mode.equals("outputMqttState") &&
+      (key.equals("outputState") || key.equals("mqttState"))) {
+    update();
+  }
+}
+
+void LedModule::update() {
+  if (_mode.equals("wifiState")) {
+    int state = getVariables()->get("wifiState", 0).toInt();
+    if (state == WIFI_CONNECTED_AP) {
+      _led->blink(800, 800);
+    } else if (state == WIFI_CONNECTED_STA) {
+      _led->on();
+    } else {
+      _led->blink(300, 300);
     }
-    if(configJson.containsKey("mode")) {
-        _mode = configJson["mode"].as<String>();
+  } else if (_mode.equals("mqttState")) {
+    int state = getVariables()->get("mqttState", 0).toInt();
+    if (state == 0) {
+      _led->off();
+    } else if (state == 1) {
+      _led->on();
     }
+  } else if (_mode.equals("outputState")) {
+    int state = getVariables()->get("outputState", 0).toInt();
+    if (state == 0) {
+      _led->off();
+    } else if (state == 1) {
+      _led->on();
+    }
+  } else if (_mode.equals("outputMqttState")) {
+    if (getVariables()->get("outputState", 0).toInt() == 1) {
+      _led->on();
+    } else if (getVariables()->get("mqttState", 0).toInt() == 0) {
+      _led->blink(500, 500);
+    } else {
+      _led->off();
+    }
+  }
 }
 
 void LedModule::loop() {
-    if(_gpio == -1) {
-        return;
-    }
-    
-    if(_mode == "wifi") {
-        if (wifiConnected()) {
-            if (getWifiState() == WIFI_CONNECTED_AP) {
-                _led->blinkAsync(800, 800);
-            } else {
-                _led->on();
-            }
-        } else {
-            _led->blinkAsync(300, 300);
-        }
-    } else if(_mode == "mqtt") {
-        if(mqttConnected()) {
-            _led->on();
-        } else {
-            _led->off();
-        }
-    #ifdef OUTPUT_SUPPORT
-    } else if(_mode == "outputMode") {
-        if(manualModeOutput()) {
-            _led->on();
-        } else {
-            _led->off();
-        }
-    } else if(_mode == "mqttOutputMode") {
-        if(manualModeOutput()) {
-            _led->on();
-        } else if(!mqttConnected()) {
-            _led->blinkAsync(800, 800);
-        } else {
-            _led->off();
-        }
-    #endif
-    } else {
-        _led->off();
-    }
-
+  if (_led != NULL) {
     _led->update();
+  }
 }
